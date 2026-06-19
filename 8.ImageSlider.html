@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Day 8 Image Slider</title>
+
+<style>
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#89f7fe,#66a6ff);
+    font-family: Arial;
+  }
+
+  .slider{
+    width: 520px;
+    height: 340px;
+    overflow:hidden;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    position:relative;
+    background:white;
+  }
+
+  .slides{
+    display:flex;
+    transition: transform 0.5s ease-in-out;
+    height:100%;
+    width:100%;
+  }
+
+  .slides img{
+    width:520px;
+    height:340px;
+    object-fit:cover;
+    flex-shrink:0;
+  }
+
+  /* Buttons */
+  .btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(0,0,0,0.5);
+    color:white;
+    border:none;
+    padding:10px 14px;
+    cursor:pointer;
+    border-radius:50%;
+    font-size:18px;
+  }
+
+  .btn:hover{
+    background:rgba(0,0,0,0.8);
+  }
+
+  .prev{ left:10px; }
+  .next{ right:10px; }
+
+  /* Dots */
+  .dots{
+    position:absolute;
+    bottom:12px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.5);
+    cursor:pointer;
+    transition:0.3s;
+  }
+
+  .dot.active{
+    background:white;
+    transform: scale(1.2);
+  }
+
+  .title{
+    position:absolute;
+    top:10px;
+    left:12px;
+    color:white;
+    font-weight:bold;
+    font-size:14px;
+    text-shadow:1px 1px 4px black;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="slider">
+  <div class="title">Day 8 - Image Slider</div>
+
+  <div class="slides" id="slides">
+    <img src="https://picsum.photos/id/1015/800/500">
+    <img src="https://picsum.photos/id/1016/800/500">
+    <img src="https://picsum.photos/id/1018/800/500">
+    <img src="https://picsum.photos/id/1020/800/500">
+  </div>
+
+  <button class="btn prev" onclick="prev()">❮</button>
+  <button class="btn next" onclick="next()">❯</button>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+const slides = document.getElementById("slides");
+const totalSlides = slides.children.length;
+const dotsContainer = document.getElementById("dots");
+
+let index = 0;
+
+// Create dots dynamically
+for(let i=0; i<totalSlides; i++){
+  let dot = document.createElement("div");
+  dot.classList.add("dot");
+  dot.addEventListener("click", () => goToSlide(i));
+  dotsContainer.appendChild(dot);
+}
+
+const dots = document.querySelectorAll(".dot");
+
+function updateSlider(){
+  slides.style.transform = `translateX(${-index * 520}px)`;
+
+  dots.forEach(dot => dot.classList.remove("active"));
+  dots[index].classList.add("active");
+}
+
+function next(){
+  index++;
+  if(index >= totalSlides){
+    index = 0;
+  }
+  updateSlider();
+}
+
+function prev(){
+  index--;
+  if(index < 0){
+    index = totalSlides - 1;
+  }
+  updateSlider();
+}
+
+function goToSlide(i){
+  index = i;
+  updateSlider();
+}
+
+// Auto slide
+setInterval(next, 3000);
+
+// initialize
+updateSlider();
+</script>
+
+</body>
+</html>

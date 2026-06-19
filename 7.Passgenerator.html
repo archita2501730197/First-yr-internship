@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Password Generator</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#2c3e50;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:380px;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.password-box{
+    display:flex;
+    margin-bottom:20px;
+}
+
+.password-box input{
+    flex:1;
+    padding:10px;
+    font-size:18px;
+    border:2px solid #3498db;
+    border-radius:5px 0 0 5px;
+    outline:none;
+}
+
+.password-box button{
+    padding:10px 15px;
+    border:none;
+    background:#3498db;
+    color:white;
+    cursor:pointer;
+    border-radius:0 5px 5px 0;
+}
+
+.password-box button:hover{
+    background:#2980b9;
+}
+
+.option{
+    margin:12px 0;
+}
+
+.option label{
+    font-size:16px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.generate-btn{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:#27ae60;
+    color:white;
+    border:none;
+    font-size:18px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.generate-btn:hover{
+    background:#219150;
+}
+
+.length{
+    text-align:center;
+    font-weight:bold;
+    margin-top:5px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Random Password Generator</h2>
+
+<div class="password-box">
+<input type="text" id="password" readonly>
+<button onclick="copyPassword()">Copy</button>
+</div>
+
+<div class="option">
+<label>Password Length</label>
+<input type="range" id="length" min="8" max="20" value="12">
+<p class="length">Length: <span id="lenValue">12</span></p>
+</div>
+
+<div class="option">
+<label><input type="checkbox" id="uppercase" checked> Uppercase Letters</label>
+</div>
+
+<div class="option">
+<label><input type="checkbox" id="lowercase" checked> Lowercase Letters</label>
+</div>
+
+<div class="option">
+<label><input type="checkbox" id="numbers" checked> Numbers</label>
+</div>
+
+<div class="option">
+<label><input type="checkbox" id="symbols" checked> Symbols</label>
+</div>
+
+<button class="generate-btn" onclick="generatePassword()">
+Generate Password
+</button>
+
+</div>
+
+<script>
+
+let lengthSlider = document.getElementById("length");
+let lenValue = document.getElementById("lenValue");
+
+lengthSlider.oninput = function(){
+    lenValue.innerHTML = this.value;
+}
+
+function generatePassword(){
+
+    let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let lower = "abcdefghijklmnopqrstuvwxyz";
+    let number = "0123456789";
+    let symbol = "!@#$%^&*()_+?><";
+
+    let all = "";
+
+    if(document.getElementById("uppercase").checked){
+        all += upper;
+    }
+
+    if(document.getElementById("lowercase").checked){
+        all += lower;
+    }
+
+    if(document.getElementById("numbers").checked){
+        all += number;
+    }
+
+    if(document.getElementById("symbols").checked){
+        all += symbol;
+    }
+
+    if(all==""){
+        alert("Please select at least one option.");
+        return;
+    }
+
+    let password = "";
+
+    let length = lengthSlider.value;
+
+    for(let i=0;i<length;i++){
+        let random = Math.floor(Math.random()*all.length);
+        password += all[random];
+    }
+
+    document.getElementById("password").value = password;
+}
+
+function copyPassword(){
+
+    let pass = document.getElementById("password");
+
+    if(pass.value==""){
+        alert("Generate a password first.");
+        return;
+    }
+
+    navigator.clipboard.writeText(pass.value);
+
+    alert("Password Copied!");
+}
+
+generatePassword();
+
+</script>
+
+</body>
+</html>

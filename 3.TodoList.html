@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List App</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#6dd5ed,#2193b0);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:400px;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.input-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+input{
+    flex:1;
+    padding:10px;
+    font-size:16px;
+    border:2px solid #2193b0;
+    border-radius:8px;
+    outline:none;
+}
+
+button{
+    padding:10px 18px;
+    background:#2193b0;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#176b85;
+}
+
+ul{
+    list-style:none;
+    max-height:300px;
+    overflow-y:auto;
+    padding-right:5px;
+}
+
+ul::-webkit-scrollbar{
+    width:8px;
+}
+
+ul::-webkit-scrollbar-thumb{
+    background:#2193b0;
+    border-radius:10px;
+}
+
+ul::-webkit-scrollbar-track{
+    background:#ddd;
+}
+
+li{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#f3f3f3;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:8px;
+}
+
+.task{
+    flex:1;
+    cursor:pointer;
+    word-break:break-word;
+}
+
+.completed{
+    text-decoration:line-through;
+    color:gray;
+}
+
+.delete{
+    background:red;
+    padding:7px 12px;
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+.delete:hover{
+    background:darkred;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>📝 To-Do List</h1>
+
+<div class="input-box">
+<input type="text" id="taskInput" placeholder="Enter a task">
+<button onclick="addTask()">Add</button>
+</div>
+
+<ul id="taskList"></ul>
+
+</div>
+
+<script>
+
+const taskList = document.getElementById("taskList");
+const taskInput = document.getElementById("taskInput");
+
+loadTasks();
+
+function addTask(){
+
+    let text = taskInput.value.trim();
+
+    if(text === ""){
+        alert("Please enter a task.");
+        return;
+    }
+
+    createTask(text,false);
+
+    taskInput.value = "";
+
+    saveTasks();
+}
+
+function createTask(text,completed){
+
+    let li = document.createElement("li");
+
+    let span = document.createElement("span");
+    span.className = "task";
+    span.innerText = text;
+
+    if(completed){
+        span.classList.add("completed");
+    }
+
+    span.onclick = function(){
+        span.classList.toggle("completed");
+        saveTasks();
+    };
+
+    let del = document.createElement("button");
+    del.innerText = "Delete";
+    del.className = "delete";
+
+    del.onclick = function(){
+        li.remove();
+        saveTasks();
+    };
+
+    li.appendChild(span);
+    li.appendChild(del);
+
+    taskList.appendChild(li);
+}
+
+function saveTasks(){
+
+    let tasks = [];
+
+    document.querySelectorAll("#taskList li").forEach(function(item){
+
+        tasks.push({
+            text:item.querySelector(".task").innerText,
+            completed:item.querySelector(".task").classList.contains("completed")
+        });
+
+    });
+
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+
+}
+
+function loadTasks(){
+
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    tasks.forEach(function(task){
+
+        createTask(task.text,task.completed);
+
+    });
+
+}
+
+taskInput.addEventListener("keypress",function(event){
+
+    if(event.key==="Enter"){
+        addTask();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
