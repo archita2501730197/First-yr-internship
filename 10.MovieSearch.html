@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Movie Search App</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#141E30,#243B55);
+min-height:100vh;
+padding:30px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:white;
+margin-bottom:30px;
+}
+
+.search-box{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-bottom:35px;
+}
+
+input{
+width:350px;
+padding:12px;
+font-size:17px;
+border:none;
+border-radius:8px;
+outline:none;
+}
+
+button{
+padding:12px 22px;
+font-size:17px;
+border:none;
+background:#ff9800;
+color:white;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#e68900;
+}
+
+#movies{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 8px 18px rgba(0,0,0,.3);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card img{
+width:100%;
+height:360px;
+object-fit:cover;
+}
+
+.info{
+padding:15px;
+}
+
+.info h2{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.info p{
+margin:6px 0;
+font-size:15px;
+}
+
+.rating{
+color:#ff9800;
+font-weight:bold;
+font-size:18px;
+}
+
+.error{
+color:white;
+text-align:center;
+font-size:20px;
+margin-top:30px;
+}
+
+.loading{
+text-align:center;
+color:white;
+font-size:22px;
+margin-top:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 Movie Search App</h1>
+
+<div class="search-box">
+<input type="text" id="movieName" placeholder="Enter movie name...">
+<button onclick="searchMovie()">Search</button>
+</div>
+
+<div id="movies"></div>
+
+</div>
+
+<script>
+
+const apiKey = "e9e5c339";
+
+async function searchMovie(){
+
+let movie=document.getElementById("movieName").value;
+
+let movies=document.getElementById("movies");
+
+if(movie==""){
+alert("Please enter movie name");
+return;
+}
+
+movies.innerHTML="<div class='loading'>Loading...</div>";
+
+try{
+
+let response=await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${movie}`);
+
+let data=await response.json();
+
+if(data.Response=="False"){
+movies.innerHTML="<div class='error'>Movie Not Found</div>";
+return;
+}
+
+movies.innerHTML="";
+
+for(let item of data.Search){
+
+let details=await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${item.imdbID}`);
+
+let movieData=await details.json();
+
+let poster=movieData.Poster;
+
+if(poster=="N/A"){
+poster="https://via.placeholder.com/300x450?text=No+Image";
+}
+
+movies.innerHTML+=`
+
+<div class="card">
+
+<img src="${poster}">
+
+<div class="info">
+
+<h2>${movieData.Title}</h2>
+
+<p><b>Year:</b> ${movieData.Year}</p>
+
+<p><b>Genre:</b> ${movieData.Genre}</p>
+
+<p><b>Runtime:</b> ${movieData.Runtime}</p>
+
+<p><b>Language:</b> ${movieData.Language}</p>
+
+<p><b>Actors:</b> ${movieData.Actors}</p>
+
+<p class="rating">⭐ ${movieData.imdbRating}</p>
+
+<p>${movieData.Plot}</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+}
+
+catch(error){
+
+movies.innerHTML="<div class='error'>Something went wrong.</div>";
+
+}
+
+}
+
+document.getElementById("movieName").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+searchMovie();
+}
+
+});
+
+</script>
+
+</body>
+</html>

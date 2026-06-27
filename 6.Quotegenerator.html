@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quote Generator</title>
+
+<style>
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#74ebd5,#acb6e5);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box{
+    background: white;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+h1{
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#quote{
+    font-size: 20px;
+    margin: 20px 0;
+    min-height: 60px;
+    color: #444;
+}
+
+#author{
+    color: gray;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+button{
+    margin: 5px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+#newBtn{ background:#4CAF50; }
+#copyBtn{ background:#2196F3; }
+#shareBtn{ background:#ff9800; }
+
+button:hover{
+    opacity: 0.85;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>💬 Random Quote Generator</h1>
+
+<div id="quote">Click "New Quote"</div>
+<div id="author"></div>
+
+<button id="newBtn" onclick="getQuote()">New Quote</button>
+<button id="copyBtn" onclick="copyQuote()">Copy</button>
+<button id="shareBtn" onclick="shareQuote()">Share</button>
+
+</div>
+
+<script>
+
+let currentQuote = "";
+
+// 🌐 WORKING API (NO ERROR)
+async function getQuote(){
+
+    try{
+        document.getElementById("quote").innerText = "Loading...";
+        document.getElementById("author").innerText = "";
+
+        const res = await fetch("https://dummyjson.com/quotes/random");
+        const data = await res.json();
+
+        currentQuote = `"${data.quote}"`;
+
+        document.getElementById("quote").innerText = currentQuote;
+        document.getElementById("author").innerText = "- " + data.author;
+
+    }
+    catch(err){
+        document.getElementById("quote").innerText =
+        "Something went wrong, try again!";
+        console.log(err);
+    }
+}
+
+// 📋 COPY
+function copyQuote(){
+    navigator.clipboard.writeText(currentQuote);
+    alert("Quote copied!");
+}
+
+// 📤 SHARE
+function shareQuote(){
+    let text = currentQuote;
+
+    if(navigator.share){
+        navigator.share({ text });
+    } else {
+        window.open(
+            "https://twitter.com/intent/tweet?text=" +
+            encodeURIComponent(text)
+        );
+    }
+}
+
+// auto load
+getQuote();
+
+</script>
+
+</body>
+</html>

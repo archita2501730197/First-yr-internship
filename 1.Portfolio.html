@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="head">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#333;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    padding:15px 8%;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+}
+
+nav ul li{
+    margin-left:20px;
+}
+
+nav ul li a{
+    color:white;
+    text-decoration:none;
+}
+
+nav ul li a:hover{
+    color:#ffd700;
+}
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:60px 8%;
+    background:white;
+    flex-wrap:wrap;
+}
+
+.hero-text{
+    width:55%;
+}
+
+.hero-text h1{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.hero-text h3{
+    color:#1e3a8a;
+    margin-bottom:15px;
+}
+
+.hero-text p{
+    line-height:1.7;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#1e3a8a;
+    color:white;
+    padding:10px 20px;
+    text-decoration:none;
+    border-radius:5px;
+}
+
+.btn:hover{
+    background:#2749b3;
+}
+
+.hero-image{
+    width:35%;
+    text-align:center;
+}
+
+.hero-image img{
+    width:250px;
+    height:250px;
+    border-radius:50%;
+    object-fit:cover;
+    border:5px solid #1e3a8a;
+}
+
+section{
+    padding:50px 8%;
+}
+
+h2{
+    text-align:center;
+    color:#1e3a8a;
+    margin-bottom:25px;
+}
+
+.about p{
+    text-align:center;
+    max-width:800px;
+    margin:auto;
+    line-height:1.8;
+}
+
+.skills{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.skill{
+    background:white;
+    padding:15px 25px;
+    border-radius:8px;
+    box-shadow:0 0 8px lightgray;
+}
+
+.projects{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.project{
+    width:300px;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 8px lightgray;
+}
+
+.project h3{
+    color:#1e3a8a;
+    margin-bottom:10px;
+}
+
+.contact{
+    text-align:center;
+}
+
+input,textarea{
+    width:70%;
+    padding:10px;
+    margin:10px;
+    border:1px solid gray;
+    border-radius:5px;
+}
+
+button{
+    padding:10px 25px;
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2749b3;
+}
+
+footer{
+    background:#1e3a8a;
+    color:white;
+    text-align:center;
+    padding:15px;
+}
+
+@media(max-width:768px){
+
+.hero{
+    flex-direction:column;
+    text-align:center;
+}
+
+.hero-text,
+.hero-image{
+    width:100%;
+}
+
+.hero-image{
+    margin-top:25px;
+}
+
+nav{
+    flex-direction:column;
+}
+
+nav ul{
+    margin-top:10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<nav>
+
+<div class="logo">My Portfolio</div>
+
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#skills">Skills</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-text">
+
+<h1>Hello, I'm Archita</h1>
+
+<h3>B.Tech Second Year Student</h3>
+
+<p>
+I am learning Web Development and enjoy creating simple,
+responsive websites using HTML and CSS.
+My goal is to improve my skills and become a Full Stack Developer.
+</p>
+
+<a href="#contact" class="btn">Contact Me</a>
+
+</div>
+
+<div class="hero-image">
+
+<img src="profile.jpeg" alt="My Photo">
+
+</div>
+
+</section>
+
+<section class="about" id="about">
+
+<h2>About Me</h2>
+
+<p>
+I am a first-year B.Tech student with an interest in web development.
+Currently, I am learning HTML, CSS and JavaScript.
+I like building simple websites and improving my programming skills by creating small projects.
+</p>
+
+</section>
+
+<section id="skills">
+
+<h2>My Skills</h2>
+
+<div class="skills">
+
+<div class="skill">HTML</div>
+
+<div class="skill">CSS</div>
+
+<div class="skill">JavaScript (Learning)</div>
+
+<div class="skill">Responsive Design</div>
+
+<div class="skill">Git (Learning)</div>
+
+</div>
+
+</section>
+
+<section id="projects">
+
+<h2>My Projects</h2>
+
+<div class="projects">
+
+<div class="project">
+
+<h3>Wardrobe Project</h3>
+
+<p>
+A simple website to organize clothes into different categories.
+It helps users manage their wardrobe in an easy way.
+</p>
+
+</div>
+
+<div class="project">
+
+<h3>CosoStyle Clothing Website</h3>
+
+<p>
+A basic clothing website that displays fashion products,
+categories and a clean homepage with responsive design.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="contact" id="contact">
+
+<h2>Contact Me</h2>
+
+<form>
+
+<input type="text" placeholder="Your Name"><br>
+
+<input type="email" placeholder="Your Email"><br>
+
+<textarea rows="5" placeholder="Your Message"></textarea><br>
+
+<button>Send</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<p>© 2026 Archita | Portfolio Website</p>
+
+</footer>
+
+</body>
+</html>

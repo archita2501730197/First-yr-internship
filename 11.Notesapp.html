@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes App</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#74ebd5,#9face6);
+    min-height:100vh;
+    padding:30px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+}
+
+.note-input{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    padding:10px;
+    border:2px solid #ddd;
+    border-radius:10px;
+    resize:none;
+    font-size:16px;
+}
+
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+    font-size:15px;
+}
+
+.add-btn{
+    background:#28a745;
+}
+
+.notes-container{
+    margin-top:25px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.note{
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    word-wrap:break-word;
+}
+
+.note p{
+    margin-bottom:15px;
+    white-space:pre-wrap;
+}
+
+.edit-btn{
+    background:#007bff;
+    margin-right:5px;
+}
+
+.delete-btn{
+    background:#dc3545;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📝 Notes App</h1>
+
+    <div class="note-input">
+        <textarea id="noteText" placeholder="Write your note here..."></textarea>
+        <button class="add-btn" onclick="addNote()">Add Note</button>
+    </div>
+
+    <div class="notes-container" id="notesContainer"></div>
+
+</div>
+
+<script>
+
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+function saveNotes(){
+    localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+function displayNotes(){
+
+    const container = document.getElementById("notesContainer");
+    container.innerHTML = "";
+
+    notes.forEach((note,index)=>{
+
+        container.innerHTML += `
+        <div class="note">
+            <p>${note}</p>
+
+            <button class="edit-btn"
+            onclick="editNote(${index})">
+            Edit
+            </button>
+
+            <button class="delete-btn"
+            onclick="deleteNote(${index})">
+            Delete
+            </button>
+        </div>
+        `;
+    });
+}
+
+function addNote(){
+
+    const noteText = document.getElementById("noteText");
+
+    if(noteText.value.trim()===""){
+        alert("Please write something!");
+        return;
+    }
+
+    notes.push(noteText.value);
+    saveNotes();
+    displayNotes();
+
+    noteText.value="";
+}
+
+function deleteNote(index){
+
+    notes.splice(index,1);
+
+    saveNotes();
+    displayNotes();
+}
+
+function editNote(index){
+
+    const updatedNote = prompt(
+        "Edit your note:",
+        notes[index]
+    );
+
+    if(updatedNote !== null && updatedNote.trim() !== ""){
+        notes[index] = updatedNote;
+
+        saveNotes();
+        displayNotes();
+    }
+}
+
+displayNotes();
+
+</script>
+
+</body>
+</html>

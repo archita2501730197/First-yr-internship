@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Finder</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#fff5ec;
+padding:30px;
+}
+
+h1{
+text-align:center;
+color:#ff5722;
+margin-bottom:25px;
+}
+
+.search-box{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-bottom:30px;
+}
+
+input{
+width:320px;
+padding:12px;
+font-size:17px;
+border:2px solid #ff5722;
+border-radius:8px;
+outline:none;
+}
+
+button{
+padding:12px 22px;
+background:#ff5722;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#e64a19;
+}
+
+.card{
+max-width:800px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+display:none;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.card h2{
+color:#333;
+margin-bottom:15px;
+}
+
+h3{
+margin-top:20px;
+margin-bottom:10px;
+color:#ff5722;
+}
+
+ul{
+padding-left:20px;
+}
+
+li{
+margin-bottom:6px;
+}
+
+.instructions{
+line-height:1.7;
+text-align:justify;
+margin-top:10px;
+}
+
+.message{
+text-align:center;
+font-size:20px;
+margin-top:40px;
+color:red;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>🍽 Recipe Finder</h1>
+
+<div class="search-box">
+<input type="text" id="search" placeholder="Enter recipe name">
+<button onclick="findRecipe()">Search</button>
+</div>
+
+<div id="recipeCard" class="card">
+
+<img id="mealImg">
+
+<h2 id="mealName"></h2>
+
+<h3>Ingredients</h3>
+
+<ul id="ingredients"></ul>
+
+<h3>Cooking Instructions</h3>
+
+<p id="instructions" class="instructions"></p>
+
+</div>
+
+<div id="message" class="message"></div>
+
+<script>
+
+async function findRecipe(){
+
+let food=document.getElementById("search").value.trim();
+
+if(food==""){
+alert("Please enter a recipe name");
+return;
+}
+
+document.getElementById("message").innerHTML="";
+document.getElementById("recipeCard").style.display="none";
+
+try{
+
+let response=await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${food}`);
+
+let data=await response.json();
+
+if(data.meals==null){
+
+document.getElementById("message").innerHTML="Recipe not found.";
+
+return;
+
+}
+
+let meal=data.meals[0];
+
+document.getElementById("mealImg").src=meal.strMealThumb;
+
+document.getElementById("mealName").innerHTML=meal.strMeal;
+
+document.getElementById("instructions").innerHTML=meal.strInstructions;
+
+let list=document.getElementById("ingredients");
+
+list.innerHTML="";
+
+for(let i=1;i<=20;i++){
+
+let ingredient=meal["strIngredient"+i];
+
+let measure=meal["strMeasure"+i];
+
+if(ingredient && ingredient.trim()!=""){
+
+let li=document.createElement("li");
+
+li.innerHTML=measure+" "+ingredient;
+
+list.appendChild(li);
+
+}
+
+}
+
+document.getElementById("recipeCard").style.display="block";
+
+}
+
+catch(error){
+
+document.getElementById("message").innerHTML="Something went wrong.";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

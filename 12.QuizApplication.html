@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Application</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#4facfe,#00f2fe);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+width:500px;
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#333;
+}
+
+.info{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+font-weight:bold;
+font-size:18px;
+}
+
+.question{
+font-size:22px;
+margin-bottom:20px;
+}
+
+.option{
+background:#f2f2f2;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.option:hover{
+background:#dfe9ff;
+}
+
+.correct{
+background:#7CFC8A !important;
+color:black;
+}
+
+.wrong{
+background:#ff7b7b !important;
+color:white;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:20px;
+background:#007bff;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.hide{
+display:none;
+}
+
+.result{
+text-align:center;
+}
+
+.result h2{
+margin-bottom:20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Quiz Application</h1>
+
+<div id="quizBox">
+
+<div class="info">
+<div>Question <span id="qNo"></span></div>
+<div>Time : <span id="timer">15</span>s</div>
+</div>
+
+<div class="question" id="question"></div>
+
+<div id="options"></div>
+
+<button id="nextBtn">Next Question</button>
+
+</div>
+
+<div class="result hide" id="result">
+
+<h2>Quiz Finished 🎉</h2>
+
+<h3>Your Score</h3>
+
+<h1 id="score"></h1>
+
+<button onclick="location.reload()">Play Again</button>
+
+</div>
+
+</div>
+
+<script>
+
+const quiz=[
+
+{
+question:"Which language is used to style web pages?",
+options:["HTML","CSS","Python","Java"],
+answer:"CSS"
+},
+
+{
+question:"Which keyword declares a variable in JavaScript?",
+options:["int","var","style","body"],
+answer:"var"
+},
+
+{
+question:"Which tag creates a hyperlink?",
+options:["img","a","p","h1"],
+answer:"a"
+},
+
+{
+question:"Which company developed JavaScript?",
+options:["Microsoft","Netscape","Google","Apple"],
+answer:"Netscape"
+},
+
+{
+question:"Which symbol is used for comments in JavaScript?",
+options:["//","##","<!-- -->","**"],
+answer:"//"
+}
+
+];
+
+let currentQuestion=0;
+let score=0;
+let time=15;
+let timer;
+
+const question=document.getElementById("question");
+const options=document.getElementById("options");
+const qNo=document.getElementById("qNo");
+const timerText=document.getElementById("timer");
+const nextBtn=document.getElementById("nextBtn");
+
+function loadQuestion(){
+
+clearInterval(timer);
+
+time=15;
+
+timerText.innerHTML=time;
+
+startTimer();
+
+qNo.innerHTML=currentQuestion+1+" / "+quiz.length;
+
+question.innerHTML=quiz[currentQuestion].question;
+
+options.innerHTML="";
+
+quiz[currentQuestion].options.forEach(option=>{
+
+const div=document.createElement("div");
+
+div.classList.add("option");
+
+div.innerHTML=option;
+
+div.onclick=()=>checkAnswer(div,option);
+
+options.appendChild(div);
+
+});
+
+}
+
+function startTimer(){
+
+timer=setInterval(()=>{
+
+time--;
+
+timerText.innerHTML=time;
+
+if(time==0){
+
+clearInterval(timer);
+
+nextQuestion();
+
+}
+
+},1000);
+
+}
+
+function checkAnswer(selected,answer){
+
+clearInterval(timer);
+
+const correct=quiz[currentQuestion].answer;
+
+document.querySelectorAll(".option").forEach(op=>{
+
+op.style.pointerEvents="none";
+
+if(op.innerHTML==correct){
+
+op.classList.add("correct");
+
+}
+
+});
+
+if(answer==correct){
+
+score++;
+
+selected.classList.add("correct");
+
+}else{
+
+selected.classList.add("wrong");
+
+}
+
+}
+
+nextBtn.addEventListener("click",nextQuestion);
+
+function nextQuestion(){
+
+currentQuestion++;
+
+if(currentQuestion<quiz.length){
+
+loadQuestion();
+
+}else{
+
+showResult();
+
+}
+
+}
+
+function showResult(){
+
+document.getElementById("quizBox").classList.add("hide");
+
+document.getElementById("result").classList.remove("hide");
+
+document.getElementById("score").innerHTML=
+
+score+" / "+quiz.length;
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
